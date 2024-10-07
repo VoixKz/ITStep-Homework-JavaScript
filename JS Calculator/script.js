@@ -1,26 +1,25 @@
-// Show menu
+
+// Show display
 const display = document.querySelector('.display')
 
-//Number buttons
+// Number buttons
 const number_btns = document.querySelectorAll('.number')
 const zero_btn = document.querySelector('.number-zero')
 
-//Funtional buttons
+// Functional buttons
 const decimal_btn = document.querySelector('.decimal')
 const clear_btn = document.querySelector('.clear')
 const delete_btn = document.querySelector('.deletion')
 
-//Operator buttons
+// Operator buttons
 const operator_btns = document.querySelectorAll('.operator')
 const equal_btn = document.querySelector('.equal')
 
-//Variables
+// Variables
 let input = ''
 let flow_marker = false
 
-
-
-//Functions
+// Functions
 function isFitToDisplay() {
     let display_text = display.innerText
     display_text = display_text.replace(/\D/g, '')
@@ -34,6 +33,7 @@ function calculate() {
     input = input.replace(/–/g, '-')
     console.log(input)
     let result = eval(input)
+    result = result.toString().length <= 10 ? result : parseFloat(result.toPrecision(9));
     display.innerText = result
     input = ''
 }
@@ -61,22 +61,15 @@ decimal_btn.addEventListener('click', () => {
 })
 
 number_btns.forEach(btn => {
-    if (flow_marker === true) {
-        btn.addEventListener('click', () => {
-            console.log('flow_marker is true')
+    btn.addEventListener('click', () => {
+        if (flow_marker === true) {
             display.innerText = ''
-            if (isFitToDisplay()) {
-                display.innerText = btn.innerText
-            }
-        })
-    } else {
-        btn.addEventListener('click', () => {
-            console.log('flow_marker is false')
-            if (isFitToDisplay()) {
-                display.innerText += btn.innerText
-            }
-        })
-    }
+            flow_marker = false
+        }
+        if (isFitToDisplay()) {
+            display.innerText += btn.innerText
+        }
+    })
 })
 
 zero_btn.addEventListener('click', () => {
@@ -119,4 +112,17 @@ operator_btns.forEach(btn => {
             flow_marker = true
         }
     })
+})
+
+
+
+// Percent button
+const percent_btn = document.querySelector('.percent')
+
+percent_btn.addEventListener('click', () => {
+    if (display.innerText.length !== 0) {
+        let currentValue = parseFloat(display.innerText)
+        let percentValue = currentValue / 100
+        display.innerText = percentValue.toString()
+    }
 })
